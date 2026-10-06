@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Youssef! 🕷️❤️</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@300;400;600;700;800&family=Sacramento&family=Cairo:wght@400;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        spideyRed: '#E62429',
+                        spideyDarkRed: '#8B0000',
+                        spideyBlue: '#005A9C',
+                        spideyDarkBlue: '#0B1B3D',
+                        spideyWeb: '#111827',
+                        romanticPink: '#FF2A75',
+                        romanticGold: '#FFD700',
+                    },
+                    fontFamily: {
+                        comic: ['Bangers', 'cursive'],
+                        romantic: ['Sacramento', 'cursive'],
+                        body: ['Outfit', 'sans-serif'],
+                        arabic: ['Cairo', 'sans-serif'],
+                        letter: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #070B19;
+            color: #F3F4F6;
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Subtle Spider-Web Background Pattern */
+        .web-bg {
+            background-color: #070b19;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(230, 36, 41, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 100% 0%, rgba(0, 90, 156, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(255, 42, 117, 0.15) 0%, transparent 50%),
+                repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 40px, rgba(255, 255, 255, 0.03) 40px, rgba(255, 255, 255, 0.03) 41px);
+        }
+
+        /* Glowing Effects */
+        .glow-red {
+            text-shadow: 0 0 15px rgba(230, 36, 41, 0.8), 0 0 25px rgba(230, 36, 41, 0.5);
+        }
+        .glow-pink {
+            text-shadow: 0 0 15px rgba(255, 42, 117, 0.8), 0 0 30px rgba(255, 42, 117, 0.4);
+        }
+        .box-glow-red {
+            box-shadow: 0 0 25px rgba(230, 36, 41, 0.5), inset 0 0 15px rgba(230, 36, 41, 0.2);
+        }
+
+        /* 3D Card Flip Effect */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner, .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Web Slinger Button Effect */
+        .spidey-btn {
+            background: linear-gradient(135deg, #E62429 0%, #B91C1C 50%, #005A9C 100%);
+            transition: all 0.3s ease;
+        }
+        .spidey-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(230, 36, 41, 0.6), 0 8px 10px -6px rgba(0, 90, 156, 0.6);
+        }
+
+        /* Paper Letter Styling */
+        .letter-paper {
+            background: #fffdf9;
+            background-image: radial-gradient(#e5e0d8 1px, transparent 0);
+            background-size: 20px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 60px rgba(210, 180, 140, 0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070B19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E62429;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF2A75;
+        }
+    </style>
+</head>
+<body class="web-bg min-h-screen relative overflow-x-hidden selection:bg-spideyRed selection:text-white">
+
+    <canvas id="webCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- STEP 1: Password Verification Modal -->
+    <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
+        <div class="bg-gradient-to-b from-spideyDarkBlue via-slate-900 to-spideyDarkRed border-2 border-red-500/70 p-8 rounded-3xl max-w-md w-full text-center relative shadow-2xl box-glow-red">
+            <div class="text-6xl mb-4 animate-bounce">🕷️🔐</div>
+            <h3 class="text-3xl font-comic text-red-400 mb-2 dir-ltr">Secret Access</h3>
+            <p class="text-gray-300 text-sm mb-6">try to guess the date:</p>
+            
+            <input type="password" id="passInput" placeholder="Password..." class="w-full bg-slate-950 border border-red-500/50 rounded-xl p-3 text-center text-white font-bold tracking-widest text-lg focus:outline-none focus:border-red-400 mb-4 dir-ltr">
+            
+            <p id="errorMsg" class="text-red-500 text-xs font-bold mb-4 hidden">كلمة السر خاطئة! حاول تاني ❤️️</p>
+            
+            <button onclick="checkPassword()" class="spidey-btn text-white font-bold w-full py-3.5 rounded-full shadow-lg text-lg">
+                open now ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- STEP 2: Romantic Letter View -->
+    <div id="letterScreen" class="fixed inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur-md hidden p-4 overflow-y-auto py-10">
+        <div class="letter-paper border-4 border-amber-900/20 max-w-2xl w-full p-8 md:p-12 rounded-2xl text-slate-900 relative shadow-2xl my-auto transition-all duration-500">
+            <!-- Envelope / Stamp Decoration -->
+            <div class="flex justify-between items-center mb-6 border-b-2 border-red-800/20 pb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl">🕷️❤️</span>
+                    <span class="font-comic text-xl text-spideyRed tracking-widest">SPECIAL LETTER</span>
+                </div>
+                <div class="text-red-600 font-bold text-sm bg-red-100 px-3 py-1 rounded-full border border-red-300">
+                    إلى: يوسف ❤️
+                </div>
+            </div>
+
+            <!-- Letter Body -->
+            <div class="font-letter text-lg md:text-xl leading-relaxed text-slate-800 space-y-4 text-right">
+                <p class="text-2xl font-bold text-red-700 mb-4">يوسف ،</p>
+
+                <p>مش عارفة أقولك إيه ولا أبدأ منين بس حابة أقولك إنك بجد من أحلى الحاجات اللي حصلتلي في حياتي أربع سنين عدوا بينا ومع كل سنة وكل موقف بحس إني بحبك أكتر وبتمسك بيك أكتر.</p>
+
+                <p>إنت مش بس الشخص اللي بحبه إنت الشخص اللي بحس معاه إني على طبيعتي اللي بحب أحكيله كل حاجة حتى الحاجات الصغيرة اللي ملهاش لازمة واللي مجرد وجوده بيخليني أحس إن الدنيا أهدى شوية.</p>
+
+                <p>بحب تفاصيلنا وكلامنا وهزارنا وخناقاتنا الصغيرة وحتى المصالحات بتاعتنا 😂❤️ بحب إن عندي شخص أقدر أرجعله وأحكيله يومي وألاقيه موجود وبحب أكتر إن الشخص ده إنت.</p>
+
+                <p>يمكن مش دايمًا بعرف أعبرلك عن كل اللي جوايا بس إنت غالي عندي أكتر بكتير من أي كلام ممكن أقوله ونفسي أفضل أشوفك مبسوط وناجح وأكون جنبك في كل خطوة جاية.</p>
+
+                <p>كل سنة وإنت حبيبي وصاحبي وأقرب حد لقلبي وإن شاء الله أعياد ميلادك الجاية نكون بنحتفل بيها وإحنا أقرب لبعض أكتر ونكون بدأنا حياتنا سوا زي ما نفسنا ❤️</p>
+
+                <p class="font-bold text-red-600 text-xl pt-2">بحبك يا يوسف وبحب إنك إنت بالذات الشخص اللي قلبي اختاره ❤</p>
+            </div>
+
+            <!-- Proceed to Website Button -->
+            <div class="mt-8 pt-6 border-t border-slate-300 text-center">
+                <button onclick="openMainWebsite()" class="spidey-btn text-white font-bold px-8 py-3.5 rounded-full shadow-lg text-lg flex items-center justify-center gap-2 mx-auto">
+                    <span>LETS START </span>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3: Main Website Content -->
+    <div id="mainContent" class="hidden">
+        <!-- Navigation Header -->
+        <nav class="relative z-20 container mx-auto px-6 py-4 flex justify-between items-center border-b border-red-900/40 backdrop-blur-md bg-spideyDarkBlue/30 rounded-b-2xl">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl">🕷️</span>
+                <span class="font-comic text-2xl tracking-wider text-spideyRed glow-red dir-ltr">SPIDEY-LOVE</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMusic()" id="musicBtn" class="bg-red-900/40 hover:bg-red-800/60 border border-red-500/50 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition duration-300">
+                    <i class="fas fa-music text-pink-400" id="musicIcon"></i>
+                    <span>تشغيل الأغنية 🎵</span>
+                </button>
+            </div>
+        </nav>
+
+        <section class="relative z-10 container mx-auto px-4 pt-12 pb-16 text-center">
+            <div class="absolute top-10 left-10 text-4xl animate-float opacity-80 hidden md:block">🕸️❤️</div>
+            <div class="absolute top-20 right-12 text-4xl animate-float opacity-80 hidden md:block" style="animation-delay: 1.5s;">🕷️💖</div>
+
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-red-950/70 border border-spideyRed/50 text-red-300 text-sm font-semibold tracking-widest uppercase shadow-inner">
+                ✨ Special Birthday Edition ✨
+            </div>
+
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-comic tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-pink-400 to-blue-500 mb-4 glow-red leading-tight">
+                Happy Birthday<br><span class="font-romantic text-6xl md:text-8xl lg:text-9xl text-pink-400 font-normal glow-pink">To My Superhero!</span> 🕷️❤️
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 font-light mb-8 leading-relaxed">
+                من بين كل الأكوان والعوالم... أنا محظوظة جداً إنك بقيت في عالمي وحياتي! 🕸️✨
+            </p>
+
+            <!-- Birthday Countdown Tracker -->
+            <div class="max-w-xl mx-auto bg-gradient-to-b from-spideyDarkBlue/80 to-slate-900/90 border border-red-500/30 p-6 rounded-2xl shadow-2xl backdrop-blur-md box-glow-red mb-10">
+                <h3 class="text-sm font-semibold uppercase tracking-widest text-red-400 mb-4 flex items-center justify-center gap-2">
+                    <i class="fas fa-heart text-xs text-pink-500"></i>
+                    العد التنازلي ليوم 7 أكتوبر 2026
+                    <i class="fas fa-heart text-xs text-pink-500"></i>
+                </h3>
+                <div class="grid grid-cols-4 gap-3 text-center dir-ltr">
+                    <div class="bg-red-950/60 border border-red-800/40 p-3 rounded-xl">
+                        <span id="days" class="text-3xl font-comic text-red-400">00</span>
+                        <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">أيام</p>
+                    </div>
+                    <div class="bg-red-950/60 border border-red-800/40 p-3 rounded-xl">
+                        <span id="hours" class="text-3xl font-comic text-red-400">00</span>
+                        <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">ساعات</p>
+                    </div>
+                    <div class="bg-red-950/60 border border-red-800/40 p-3 rounded-xl">
+                        <span id="minutes" class="text-3xl font-comic text-red-400">00</span>
+                        <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">دقائق</p>
+                    </div>
+                    <div class="bg-red-950/60 border border-red-800/40 p-3 rounded-xl">
+                        <span id="seconds" class="text-3xl font-comic text-red-400">00</span>
+                        <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">ثواني</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero CTA Button -->
+            <div class="flex flex-wrap gap-4 justify-center">
+                <a href="#gallery" class="spidey-btn text-white font-bold px-8 py-4 rounded-full text-lg shadow-lg flex items-center gap-3">
+                    <span>OUR FAVOURITE MEMORIES</span>
+                    <i class="fas fa-arrow-down"></i>
+                </a>
+                <button onclick="triggerSurprise()" class="bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-500 hover:to-red-500 text-white font-bold px-8 py-4 rounded-full text-lg shadow-lg flex items-center gap-3 border border-pink-400/40 transition">
+                    <span> YOUR SECRET MESSAGE🎁</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="relative z-10 container mx-auto px-4 py-16">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 text-pink-400 font-comic text-2xl tracking-wider uppercase mb-2">
+                    <span>🕷️ Photo Scrapbook 🕷️</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-white">ذكرياتنا الحلوة سوا</h2>
+                <p class="text-gray-400 text-sm mt-2">اضغط على أي صورة لقلبها وقراءة كلام الذكرى!</p>
+            </div>
+
+            <!-- Polaroid Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Polaroid 1 -->
+                <div class="flip-card h-[450px] cursor-pointer">
+                    <div class="flip-card-inner shadow-2xl">
+                        <div class="flip-card-front bg-slate-100 text-slate-800 p-4 pb-6 flex flex-col justify-between border-8 border-white rounded-xl shadow-xl transform rotate-[-2deg]">
+                            <div class="relative w-full h-[300px] rounded-lg overflow-hidden bg-gray-900 group">
+                                <img id="img1" src="https://i.ibb.co/LdyBSZN0/Whats-App-Image-2026-10-02-at-11-17-07-AM.jpg" alt="Eyes photo" class="w-full h-full object-cover">
+                                <div class="absolute top-2 right-2 bg-spideyRed text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md border border-red-300 flex items-center gap-1">
+                                    <span>🕷️</span> Spidey Couple
+                                </div>
+                            </div>
+                            <div class="text-center pt-3">
+                                <p class="font-romantic text-3xl text-spideyRed font-bold">Caught In Your Web</p>
+                                <span class="text-xs text-gray-500 font-medium">اضغط لقلب الصورة 🔄</span>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-spideyDarkBlue to-slate-900 border-2 border-red-500/50 p-6 flex flex-col justify-between text-white rounded-xl shadow-xl">
+                            <div class="text-center my-auto">
+                                <span class="text-4xl">👁️❤️</span>
+                                <h4 class="font-comic text-2xl text-red-400 mt-2">أهم حاجة في حياتي</h4>
+                                <p class="font-arabic text-base text-pink-200 mt-4 leading-relaxed font-semibold">
+                                    "ممكن محدش يفهم ليه الصورة دي مميزة بالنسبالي.. بس أنا عارفة، عشان فيها عيني وهي بتبص على أهم حاجة في حياتي ❤️"
+                                </p>
+                            </div>
+                            <div class="text-center border-t border-gray-700/60 pt-4">
+                                <label class="bg-red-600/80 hover:bg-red-500 text-white text-xs px-3 py-2 rounded-lg cursor-pointer inline-flex items-center gap-1 transition">
+                                    <i class="fas fa-camera"></i> تغيير الصورة
+                                    <input type="file" accept="image/*" class="hidden" onchange="uploadCustomImage(event, 'img1')">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Polaroid 2 -->
+                <div class="flip-card h-[450px] cursor-pointer">
+                    <div class="flip-card-inner shadow-2xl">
+                        <div class="flip-card-front bg-slate-100 text-slate-800 p-4 pb-6 flex flex-col justify-between border-8 border-white rounded-xl shadow-xl transform rotate-[2deg]">
+                            <div class="relative w-full h-[300px] rounded-lg overflow-hidden bg-gray-900">
+                                <img id="img2" src="https://i.ibb.co/8LBNqg8S/Whats-App-Image-2026-10-02-at-11-17-08-AM.jpg" alt="Together photo" class="w-full h-full object-cover">
+                                <div class="absolute top-2 right-2 bg-spideyBlue text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md border border-blue-300 flex items-center gap-1">
+                                    <span>💙</span> My Peter Parker
+                                </div>
+                            </div>
+                            <div class="text-center pt-3">
+                                <p class="font-romantic text-3xl text-spideyBlue font-bold">Sweetest Adventure</p>
+                                <span class="text-xs text-gray-500 font-medium">اضغط لقلب الصورة 🔄</span>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-spideyDarkRed to-slate-900 border-2 border-pink-500/50 p-6 flex flex-col justify-between text-white rounded-xl shadow-xl">
+                            <div class="text-center my-auto">
+                                <span class="text-4xl">📸❤️</span>
+                                <h4 class="font-comic text-2xl text-pink-400 mt-2">ذكرياتنا سوا</h4>
+                                <p class="font-arabic text-sm text-pink-200 mt-3 leading-relaxed font-semibold">
+                                    "كل ما بشوف صورنا بفتكر قد إيه إحنا عدينا بحاجات كتير سوا، وبحس قد إيه أنا محظوظة إنك موجود في حياتي.. نفسي أفضل معاك في كل الصور اللي لسه هناخدها وفي كل الذكريات اللي لسه هنعملها سوا ❤️"
+                                </p>
+                            </div>
+                            <div class="text-center border-t border-gray-700/60 pt-4">
+                                <label class="bg-blue-600/80 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg cursor-pointer inline-flex items-center gap-1 transition">
+                                    <i class="fas fa-camera"></i> تغيير الصورة
+                                    <input type="file" accept="image/*" class="hidden" onchange="uploadCustomImage(event, 'img2')">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Polaroid 3 -->
+                <div class="flip-card h-[450px] cursor-pointer">
+                    <div class="flip-card-inner shadow-2xl">
+                        <div class="flip-card-front bg-slate-100 text-slate-800 p-4 pb-6 flex flex-col justify-between border-8 border-white rounded-xl shadow-xl transform rotate-[-1deg]">
+                            <div class="relative w-full h-[300px] rounded-lg overflow-hidden bg-gray-900">
+                                <img id="img3" src="https://i.ibb.co/4wTTY6Y1/Whats-App-Image-2026-10-02-at-11-17-10-AM.jpg" alt="Clay activity photo" class="w-full h-full object-cover">
+                                <div class="absolute top-2 right-2 bg-pink-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md border border-pink-300 flex items-center gap-1">
+                                    <span>💖</span> Forever & Always
+                                </div>
+                            </div>
+                            <div class="text-center pt-3">
+                                <p class="font-romantic text-3xl text-pink-600 font-bold">My Entire Universe</p>
+                                <span class="text-xs text-gray-500 font-medium">اضغط لقلب الصورة 🔄</span>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-spideyDarkBlue to-slate-900 border-2 border-red-500/50 p-6 flex flex-col justify-between text-white rounded-xl shadow-xl">
+                            <div class="text-center my-auto">
+                                <span class="text-4xl">🎨❤️</span>
+                                <h4 class="font-comic text-2xl text-yellow-400 mt-1">يوم مميز</h4>
+                                <p class="font-arabic text-xs text-pink-200 mt-2 leading-relaxed font-semibold">
+                                    "اليوم ده من أكتر الأيام اللي بحب أفتكرها عشان قولتلي هعوضك وفعلاً عوضتني وفرحتني أكتر مما اتخيلت.. أكتر حاجة حلوة إنك كنت عايز تشوفني مبسوطة وعملت كل ده عشان تفرحني.. بحبك وبحب أوي الطريقة اللي بتخليني أحس إني مهمة عندك ❤️"
+                                </p>
+                            </div>
+                            <div class="text-center border-t border-gray-700/60 pt-3">
+                                <label class="bg-pink-600/80 hover:bg-pink-500 text-white text-xs px-3 py-2 rounded-lg cursor-pointer inline-flex items-center gap-1 transition">
+                                    <i class="fas fa-camera"></i> تغيير الصورة
+                                    <input type="file" accept="image/*" class="hidden" onchange="uploadCustomImage(event, 'img3')">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Why You're My Spider-Man -->
+        <section class="relative z-10 container mx-auto px-4 py-16 border-t border-red-900/30">
+            <div class="text-center mb-12">
+                <div class="inline-block px-4 py-1.5 bg-red-950/80 border border-red-500/40 rounded-full text-red-300 text-xs font-bold uppercase mb-3 shadow-inner">
+                    🕸️ Special Reasons 🕸️
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-3">Why You're My Spider-Man 🕷️❤️</h2>
+                <p class="text-gray-400 text-sm">اضغط على أي كارت لرؤية السبب!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Reason 1 -->
+                <div onclick="toggleReason(this)" class="reason-card cursor-pointer bg-slate-900/90 border border-red-500/30 p-6 rounded-2xl hover:border-red-500 transition duration-300 relative overflow-hidden group shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-red-950/80 border border-red-500/40 flex items-center justify-center text-xl text-red-400 group-hover:scale-110 transition shrink-0">
+                            🛡️
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-white font-arabic">حمايتك ليا</h4>
+                            <p class="text-xs text-gray-400 mt-1">👈</p>
+                        </div>
+                    </div>
+                    <div class="reason-text hidden mt-4 pt-3 border-t border-gray-800 text-pink-300 text-base font-arabic leading-relaxed font-semibold">
+                        "عشان دايمًا بتحاول تحميني حتى من حاجات أنا مش واخدة بالي منها"
+                    </div>
+                </div>
+
+                <!-- Reason 2 -->
+                <div onclick="toggleReason(this)" class="reason-card cursor-pointer bg-slate-900/90 border border-blue-500/30 p-6 rounded-2xl hover:border-blue-500 transition duration-300 relative overflow-hidden group shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-950/80 border border-blue-500/40 flex items-center justify-center text-xl text-blue-400 group-hover:scale-110 transition shrink-0">
+                            🤝
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-white font-arabic">وجودك الجميل</h4>
+                            <p class="text-xs text-gray-400 mt-1">👈</p>
+                        </div>
+                    </div>
+                    <div class="reason-text hidden mt-4 pt-3 border-t border-gray-800 text-blue-300 text-base font-arabic leading-relaxed font-semibold">
+                        "عشان مهما حصل بلاقيك موجود جنبي ومبتسبنيش لوحدي"
+                    </div>
+                </div>
+
+                <!-- Reason 3 -->
+                <div onclick="toggleReason(this)" class="reason-card cursor-pointer bg-slate-900/90 border border-pink-500/30 p-6 rounded-2xl hover:border-pink-500 transition duration-300 relative overflow-hidden group shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-950/80 border border-pink-500/40 flex items-center justify-center text-xl text-pink-400 group-hover:scale-110 transition shrink-0">
+                            😊
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-white font-arabic">ضحكتي معاك</h4>
+                            <p class="text-xs text-gray-400 mt-1">👈</p>
+                        </div>
+                    </div>
+                    <div class="reason-text hidden mt-4 pt-3 border-t border-gray-800 text-pink-300 text-base font-arabic leading-relaxed font-semibold">
+                        "عشان بتعرف تخليني أضحك حتى وأنا متضايقة"
+                    </div>
+                </div>
+
+                <!-- Reason 4 -->
+                <div onclick="toggleReason(this)" class="reason-card cursor-pointer bg-slate-900/90 border border-yellow-500/30 p-6 rounded-2xl hover:border-yellow-500 transition duration-300 relative overflow-hidden group shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-yellow-950/80 border border-yellow-500/40 flex items-center justify-center text-xl text-yellow-400 group-hover:scale-110 transition shrink-0">
+                            👂
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-white font-arabic">سماعك ليا</h4>
+                            <p class="text-xs text-gray-400 mt-1">👈</p>
+                        </div>
+                    </div>
+                    <div class="reason-text hidden mt-4 pt-3 border-t border-gray-800 text-yellow-300 text-base font-arabic leading-relaxed font-semibold">
+                        "عشان بتسمعني وبتحاول تحل أي حاجة مضايقاني"
+                    </div>
+                </div>
+
+                <!-- Reason 5 -->
+                <div onclick="toggleReason(this)" class="reason-card cursor-pointer bg-slate-900/90 border border-purple-500/30 p-6 rounded-2xl hover:border-purple-500 transition duration-300 relative overflow-hidden group shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-950/80 border border-purple-500/40 flex items-center justify-center text-xl text-purple-400 group-hover:scale-110 transition shrink-0">
+                            🏡
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-white font-arabic">أماني وراحتي</h4>
+                            <p class="text-xs text-gray-400 mt-1">👈</p>
+                        </div>
+                    </div>
+                    <div class="reason-text hidden mt-4 pt-3 border-t border-gray-800 text-purple-300 text-base font-arabic leading-relaxed font-semibold">
+                        "عشان مهما الدنيا كانت صعبة بتحاول تخليني أحس إني أمان وأنا معاك"
+                    </div>
+                </div>
+
+                <!-- Reason 6 -->
+                <div onclick="toggleReason(this)" class="reason-card cursor-pointer bg-slate-900/90 border border-red-500/30 p-6 rounded-2xl hover:border-red-500 transition duration-300 relative overflow-hidden group shadow-lg">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-red-950/80 border border-red-500/40 flex items-center justify-center text-xl text-red-400 group-hover:scale-110 transition shrink-0">
+                            🌟
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-white font-arabic">سبايدر مان بتاعي</h4>
+                            <p class="text-xs text-gray-400 mt-1">👈</p>
+                        </div>
+                    </div>
+                    <div class="reason-text hidden mt-4 pt-3 border-t border-gray-800 text-pink-300 text-base font-arabic leading-relaxed font-semibold">
+                        "وعشان ببساطة مفيش سبايدر مان في الدنيا كلها شبه سبايدر مان بتاعي ❤️🕷️"
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: THE TIMELINE OF OUR LOVE -->
+        <section class="relative z-10 container mx-auto px-4 py-16 border-t border-red-900/30">
+            <div class="text-center mb-16">
+                <div class="inline-block px-4 py-1.5 bg-amber-950/80 border border-amber-500/40 rounded-full text-amber-300 text-xs font-bold uppercase mb-3 shadow-inner">
+                    📜 Story Of Us 📜
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-2 font-comic tracking-wider text-amber-400 dir-ltr">
+                    THE TIMELINE OF OUR LOVE 🤎
+                </h2>
+                <p class="text-gray-400 text-sm">حكايتنا الحلوة وكيف بدأ كل شيء ✨</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-10">
+                <!-- Chapter One -->
+                <div class="bg-gradient-to-r from-slate-900 via-stone-900 to-slate-900 border-2 border-amber-700/40 rounded-2xl p-6 md:p-8 relative shadow-2xl hover:border-amber-500 transition duration-300">
+                    <div class="absolute -top-4 right-6 bg-amber-800 text-amber-100 font-comic text-base px-4 py-1 rounded-md shadow-lg dir-ltr">
+                        Chapter One — The Beginning 🤎
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-200 leading-relaxed font-arabic text-lg font-medium">
+                            At first, Youssef was just my friend’s brother’s friend. I used to see him at her place sometimes, and I never thought of him as anything more.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed font-arabic text-lg mt-3">
+                            Until one day, I was feeling overwhelmed and went to talk to my friend about a problem. Youssef was there and heard me. From that day, he started checking on me and making sure I was okay.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Chapter Two -->
+                <div class="bg-gradient-to-r from-slate-900 via-stone-900 to-slate-900 border-2 border-amber-700/40 rounded-2xl p-6 md:p-8 relative shadow-2xl hover:border-amber-500 transition duration-300">
+                    <div class="absolute -top-4 right-6 bg-amber-800 text-amber-100 font-comic text-base px-4 py-1 rounded-md shadow-lg dir-ltr">
+                        Chapter Two — Getting Closer 🤎
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-200 leading-relaxed font-arabic text-lg font-medium">
+                            With time, we started talking more. I began telling him about my problems and my life, and he was always there to listen and support me.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed font-arabic text-lg mt-3">
+                            He would pick me up from my lessons and take me home. They were simple things, but they meant so much to me.
+                        </p>
+                        <p class="text-amber-200 font-semibold leading-relaxed font-arabic text-lg mt-3">
+                            Without realizing it, we became closer and closer every day.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Chapter Three -->
+                <div class="bg-gradient-to-r from-slate-900 via-red-950/40 to-slate-900 border-2 border-red-500/50 rounded-2xl p-6 md:p-8 relative shadow-2xl hover:border-red-500 transition duration-300">
+                    <div class="absolute -top-4 right-6 bg-spideyRed text-white font-comic text-base px-4 py-1 rounded-md shadow-lg dir-ltr">
+                        Chapter Three — Where Our Story Began ❤️
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-200 leading-relaxed font-arabic text-lg font-medium">
+                            One day, at a gas station, something happened that changed everything.
+                        </p>
+                        <p class="text-pink-300 font-bold leading-relaxed font-arabic text-xl mt-3">
+                            Youssef told me that he loved me, and from that moment, our real story began.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed font-arabic text-lg mt-3">
+                            That gas station became a very special place for us, because it witnessed the moment our love story started. Even today, we still go there and remember how it all began.
+                        </p>
+                        <p class="text-red-400 font-bold text-xl leading-relaxed font-arabic mt-4 pt-3 border-t border-red-900/50">
+                            And from that day on, the most beautiful chapter of my life began. ❤️
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Surprise Modal for Boat Message -->
+        <div id="surpriseModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md hidden p-4">
+            <div class="bg-gradient-to-b from-spideyDarkBlue via-slate-900 to-spideyDarkRed border-2 border-red-500/70 p-6 md:p-8 rounded-3xl max-w-lg w-full text-center relative shadow-2xl box-glow-red">
+                <button onclick="closeSurprise()" class="absolute top-4 left-4 text-gray-400 hover:text-white text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="text-6xl mb-3 animate-bounce">🎁🕷️❤️</div>
+                <h3 class="text-3xl font-comic text-red-400 mb-2 dir-ltr">Secret Note</h3>
+                <p class="text-xs text-pink-300 mb-4 uppercase tracking-widest font-semibold">رسالة خاصة جداً</p>
+                <div class="bg-slate-950/60 p-6 rounded-xl border border-red-900/50 mb-6 text-right">
+                    <p class="font-arabic text-lg text-pink-200 leading-relaxed font-semibold">
+                        عارف ان عيد ميلادك اللي علي الورق بس ده عيد ميلادك الحقيقي ف حبيت اعملك حاجه مختلفه خصوصا اني بوظت الحاجه المميزه اللي كنت عايزه اعملها لك في عيد ميلادك<br><br>
+                        مع انك دلوقتي بتتخانق معايا على المركب ومزعلني بس مش مشكله مصيرنا نتصالح<br><br>
+                        بحبك اوي يا رب تتبسط لما تشوفه❤️
+                    </p>
+                </div>
+                <button onclick="closeSurprise()" class="spidey-btn text-white font-bold w-full py-3.5 rounded-full shadow-lg text-lg">
+                    بحبك اوي 💖
+                </button>
+            </div>
+        </div>
+
+        <footer class="relative z-10 border-t border-gray-800/80 bg-slate-950/80 py-8 text-center text-gray-500 text-sm">
+            <p class="flex items-center justify-center gap-2">
+                Made with <span class="text-red-500 text-lg">❤️</span> for Youssef
+            </p>
+            <p class="text-xs text-gray-600 mt-2">🕷️ Spidey Birthday Edition • Love Multiverse</p>
+        </footer>
+    </div>
+
+    <script>
+        // STEP 1: Check Password
+        function checkPassword() {
+            const input = document.getElementById('passInput').value;
+            if(input === "2712") {
+                document.getElementById('passwordModal').classList.add('hidden');
+                document.getElementById('letterScreen').classList.remove('hidden');
+                triggerConfetti();
+            } else {
+                document.getElementById('errorMsg').classList.remove('hidden');
+            }
+        }
+
+        // STEP 2: Open Main Website from Letter
+        function openMainWebsite() {
+            document.getElementById('letterScreen').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            initCanvas();
+            triggerConfetti();
+        }
+
+        // Web Canvas Effect
+        let canvas, ctx, particles = [];
+        function initCanvas() {
+            canvas = document.getElementById('webCanvas');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            particles = [];
+            for (let i = 0; i < 45; i++) {
+                particles.push(new WebParticle());
+            }
+            animateCanvas();
+        }
+
+        function resizeCanvas() {
+            if(canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        }
+
+        class WebParticle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.6;
+                this.vy = (Math.random() - 0.5) * 0.6;
+                this.radius = Math.random() * 2 + 1;
+                this.color = Math.random() > 0.5 ? '#E62429' : '#005A9C';
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+            }
+        }
+
+        function animateCanvas() {
+            if(!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(230, 36, 41, ${0.15 - dist / 1000})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+
+        // Updated Countdown Timer targeting October 7, 2026
+        const targetDate = new Date("2026-10-07T00:00:00").getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = String(days).padStart(2, '0');
+                document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+            } else {
+                document.getElementById('days').innerText = "00";
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Toggle Reasons Script
+        function toggleReason(card) {
+            const text = card.querySelector('.reason-text');
+            text.classList.toggle('hidden');
+            card.classList.toggle('box-glow-red');
+        }
+
+        // Music Trigger Function to Play YouTube Song
+        function toggleMusic() {
+            window.open("https://youtu.be/VpnDecr20WU?si=zZ1gHnVResbocoxx", "_blank");
+        }
+
+        // Confetti Effect
+        function triggerConfetti() {
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Surprise Modal Trigger
+        function triggerSurprise() {
+            document.getElementById('surpriseModal').classList.remove('hidden');
+            triggerConfetti();
+        }
+
+        function closeSurprise() {
+            document.getElementById('surpriseModal').classList.add('hidden');
+        }
+
+        function uploadCustomImage(event, targetImgId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(targetImgId).src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>
